@@ -1,34 +1,25 @@
 <script setup lang="ts">
 import { defineEmits, ref } from 'vue';
 
-// Define the emit for the component
 const emit = defineEmits<{
-  (event: 'updateFilter', value: string): void;
+  (event: 'updateFilter', value: [string, string]): void;
 }>();
 
-// Define the model for the filterText
-const filterText = defineModel<string>();
+let filterTitle = ref("")
+let filterArtist = ref("")
 
-defineProps<{
-  filterText: string;
-}>();
-
-// Watch for changes in the input and emit an event
-const updateFilter = (value: string) => {
-  emit('updateFilter', value);
+const updateFilter = () => {
+  emit('updateFilter', [filterTitle, filterArtist]);
 };
 </script>
 
 <template>
   <div class="header">
     <h1>Songs</h1>
-    <input type="text" v-model="filterText" @input="updateFilter($event.target.value)" placeholder="Search for songs..."
+    <input type="text" v-model="filterTitle" @input="updateFilter()" placeholder="Search for songs..."
       class="search-box" />
-    <ul class="song-list">
-      <li v-for="song in filteredSongs" :key="song.id">
-        {{ song.name }}
-      </li>
-    </ul>
+    <input type="text" v-model="filterArtist" @input="updateFilter()" placeholder="Search for artists..."
+      class="search-box" />
   </div>
 </template>
 
@@ -53,6 +44,7 @@ h1 {
   border-radius: 5px;
   border: 1px solid #ccc;
   font-size: 1rem;
+  margin-right: 2%;
 }
 
 .song-list {
